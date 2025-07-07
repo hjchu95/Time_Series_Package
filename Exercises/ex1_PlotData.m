@@ -13,10 +13,10 @@ addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/Exercises")
 addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/TS_lib")
 
 %% 1. Loading Data
-KOR_data = readmatrix("tsdata_20250704.xlsx",'Sheet','KOR','Range','B2:L102');
+KOR_data = readmatrix("tsdata_20250704.xlsx",'Sheet','KOR','Range','B2:M102');
 % 2000 Q1 ~ 2025 Q1
 % NGDPSA, RGDPSA, NGDPNSA, RGDPNSA, GDPdef, CPI, ForEX, Call, CD91, GOV1Y, GOV3Y
-US_data = readmatrix("tsdata_20250704.xlsx",'Sheet','US','Range','B2:N262');
+US_data = readmatrix("tsdata_20250704.xlsx",'Sheet','US','Range','B2:O262');
 % 1960 Q1 ~ 2025 Q1
 % NGDPSA, NGDPNSA, RGDPSA, RGDPNSA, GDPDEF, PCE, CPI, PPI, FFE, T10Y,
 % T10M3Y, UNEMP, WTI
@@ -146,4 +146,77 @@ grid on
 % and the pre-2017 real GDP is measured to be higher than that of the nominal GDP.
 
 %% 4. Converting Variables
+kor_change = [KOR_data(:,2),KOR_data(:,5),KOR_data(:,6)];
+kor_forex = KOR_data(5:end,7);
+kor_int = KOR_data(5:end,8:end-1);
+kor_unemp = KOR_data(5:end,end);
 
+kor_y_inf = pc_diff(kor_change,1);
+
+us_change = [US_data(:,3),US_data(:,5:8)];
+us_int = US_data(2:end,9:12);
+us_unemp = US_data(2:end,13);
+WTI = US_data(2:end,14);
+
+us_y_inf = pc_diff(us_change,2);
+
+%% 5. Comparing Price Index and Inflation Rate
+kor_gdpdef = KOR_data(:,5);
+kor_cpi = KOR_data(:,6);
+kor_gdpdef_inf = kor_y_inf(:,2);
+kor_cpi_inf = kor_y_inf(:,3);
+
+f4 = figure('Position',[300 200 1100 600]);
+subplot(2,1,1)
+plot([kor_gdpdef,kor_cpi], 'LineWidth', 2)
+max1 = max(max(kor_gdpdef), max(kor_cpi));
+min1 = min(min(kor_gdpdef), min(kor_cpi));
+if min1 < 0
+    q = 1.1;
+else
+    q = 0.9;
+end
+axis([1 rows(kor_gdpdef) q*min1 1.1*max1])
+xticks(1:20:rows(kor_gdpdef))
+xticklabels({'2000','2005','2010','2015','2020','2025'})
+title('KOR GDPDEF vs CPI', 'fontsize', 20, 'interpreter', 'latex')
+legend('KOR GDPDEF', 'KOR CPI', 'location', 'north')
+grid on
+
+return
+
+
+%% 6. Plotting Main Macro Variables for Korea and the US
+kor_growth = kor_y_inf(:,1);
+
+f6 = figure('Position',[300 200 1100 600]);
+subplot(3,1,1)
+plot([kor_growth,kor_unemp], 'LineWidth', 2)
+max1 = max(max(kor_growth), max(kor_unemp));
+min1 = min(min(kor_growth), min(kor_unemp));
+if min1 < 0
+    q = 1.1;
+else
+    q = 0.9;
+end
+axis([1 rows(kor_growth) q*min1 1.1*max1])
+xticks(1:20:rows(kor_growth))
+xticklabels({'2001','2006','2011','2016','2021'})
+title('Time Series of Macro Variables (KOR)', 'fontsize', 20, 'interpreter', 'latex')
+legend('Growth', 'Unemployment', 'location', 'northeast')
+grid on
+
+subplot(3,1,2)
+plot([kor_gdpdef_inf,kor_cpi_inf], 'LineWidth', 2)
+max1 = max(max(kor_gdpdef_inf), max(kor_cpi_inf));
+min1 = min(min(kor_gdpdef_inf), min(kor_cpi_inf));
+if min1 < 0
+    q = 1.1;
+else
+    q = 0.9;
+end
+axis([1 rows(kor_gdpdef_inf) q*min1 1.1*max1])
+xticks(1:20:rows(kor_gdpdef_inf))
+xticklabels({'2001','2006','2011','2016','2021'})
+legend('GDP Deflator', 'CPI', 'location', 'northeast')
+grid on

@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% This is the code for loading the data from ECOS and FRED and generate an
-% excel file.
+% This exercise loads the data from ECOS and FRED using Open API and 
+% generates an excel file containing the data.
 
 % 0. Get your open API keys.
 
@@ -37,7 +37,7 @@ addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/TS_lib")
 %% 1. ECOS
 % (1) Local Options
 start_date = '2000Q1'; % Start of the date !!! MUST MAINTAIN FORMAT !!!
-end_date = '2025Q1'; % End of the date
+end_date = '2025Q2'; % End of the date
 start_page = '1';
 end_page = '10000';
 key = 'MQ0GI502T3W668LVZH6C';
@@ -103,6 +103,9 @@ code_dictionary = [
         }, ...
         'sub_code2', '?' ...
     )
+    struct( ...
+        'name', 'Unemployment', ...
+        'main_code', '901Y027')
 ];
 
 % (3) Building Table
@@ -112,7 +115,7 @@ KOR_df = ecos_api(code_dictionary, key, options);
 % (1) Local options
 fred_key = 'ba6c14c61b7c835966f6bec28069ef42';
 start_date = '1960-01-01';
-end_date = '2025-03-31';
+end_date = '2025-06-30';
 
 fred_options = struct();
 fred_options.start_date = start_date;
@@ -134,6 +137,7 @@ code_dictionary = {
 
     % Interest Rate
     'FEDFUNDS', 'FFE';
+    'TB3MS', 'T3M';
     'GS10', 'T10Y';
     'T10Y3MM', 'T10M3M';
 
@@ -179,6 +183,6 @@ for k = 8:1:K
 end
 
 %% 5. Saving as xlsx file
-writetable(KOR_df,'tsdata_20250627.xlsx','Sheet','KOR','Range','A1:Z300')
-writetable(US_df_final,'tsdata_20250627.xlsx','Sheet','US','Range','A1:Z300')
-writetable(REC_df,'tsdata_20250627.xlsx','Sheet','REC','Range','A1:B300')
+writetable(KOR_df,'tsdata_20250704.xlsx','Sheet','KOR','Range','A1:Z300')
+writetable(US_df_final,'tsdata_20250704.xlsx','Sheet','US','Range','A1:Z300')
+writetable(REC_df,'tsdata_20250704.xlsx','Sheet','REC','Range','A1:B300')
