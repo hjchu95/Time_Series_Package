@@ -25,13 +25,7 @@ else
     q1 = 0.9;
 end
 
-if max_val < 0
-    q2 = 1.1;
-else
-    q2 = 0.9;
-end
-
 y_min = q1 * min_val;
-y_max = q2 * max_val;
+y_max = 1.1 * max_val;
 
 ax = [1 n y_min y_max];

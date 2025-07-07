@@ -34,6 +34,8 @@ close all
 addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/Exercises")
 addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/TS_lib")
 
+filename = 'tsdata_20250704.xlsx';
+
 %% 1. ECOS
 % (1) Local Options
 start_date = '2000Q1'; % Start of the date !!! MUST MAINTAIN FORMAT !!!
@@ -186,6 +188,6 @@ for k = 8:1:K
 end
 
 %% 5. Saving as xlsx file
-writetable(KOR_df,'tsdata_20250704.xlsx','Sheet','KOR','Range','A1:Z300')
-writetable(US_df_final,'tsdata_20250704.xlsx','Sheet','US','Range','A1:Z300')
-writetable(REC_df,'tsdata_20250704.xlsx','Sheet','REC','Range','A1:B300')
+writetable(KOR_df,filename,'Sheet','KOR','Range','A1:Z300')
+writetable(US_df_final,filename,'Sheet','US','Range','A1:Z300')
+writetable(REC_df,filename,'Sheet','REC','Range','A1:B300')
