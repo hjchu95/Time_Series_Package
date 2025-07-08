@@ -51,8 +51,6 @@ plot_time_series([kor_RGDPNSA, kor_RGDPSA], ...
     {'KOR RGDPNSA', 'KOR RGDPSA'}, 1)
 save_as_html(f2,save_folder,'figure1b')
 
-return
-
 % 2-(2) US
 us_NGDPSA = US_data(:,1)./4; % Seasonally Adjusted Annualized Rate to Quarterly
 us_NGDPNSA = US_data(:,2)*0.001; % millions of dollars to billions of dollars
@@ -61,32 +59,34 @@ us_RGDPNSA = US_data(:,4);
 
 us_T = rows(us_NGDPNSA);
 
-f2 = figure('Position',[300 200 1100 600]);
-subplot(2,1,1)
+f3 = figure('Position',[300 200 1100 600]);
 plot_time_series([us_NGDPNSA, us_NGDPSA], ...
     1:20:us_T,us_xtick_labels1, ...
     'US NGDP Seasonally Adjusted vs Not Seasonally Adjusted', ...
     {'US NGDPNSA', 'US NGDPSA'}, 1)
+save_as_html(f3,save_folder,'figure2a')
 
-subplot(2,1,2)
+f4 = figure('Position',[300 200 1100 600]);
 plot_time_series([us_RGDPNSA, us_RGDPSA], ...
     1:20:us_T,us_xtick_labels1, ...
     'US RGDP Seasonally Adjusted vs Not Seasonally Adjusted', ...
     {'US RGDPNSA', 'US RGDPSA'}, 1)
+save_as_html(f4,save_folder,'figure2b')
 
 %% 3. Comparing Nominal and Real GDP
-f3 = figure('Position',[300 200 1100 600]);
-subplot(2,1,1)
+f5 = figure('Position',[300 200 1100 600]);
 plot_time_series([kor_NGDPSA, kor_RGDPSA], ...
     1:20:kor_T,kor_xtick_labels1, ...
     'KOR NGDPSA vs RGDPSA', ...
     {'KOR NGDPSA', 'KOR RGDPSA'}, 1)
+save_as_html(f5,save_folder,'figure3a')
 
-subplot(2,1,2)
+f6 = figure('Position',[300 200 1100 600]);
 plot_time_series([us_NGDPSA, us_RGDPSA], ...
     1:20:us_T,us_xtick_labels1, ...
     'US NGDPSA vs RGDPSA', ...
     {'US NGDPSA', 'US RGDPSA'}, 1)
+save_as_html(f6,save_folder,'figure3b')
 
 % <Thoughts>
 % Before 2017, Real GDP is larger than the Nominal GDP.
@@ -132,18 +132,19 @@ us_ppi_inf = us_y_inf(:,5);
 
 dus_T = rows(us_gdpdef_inf);
 
-f4 = figure('Position',[300 200 1100 600]);
-subplot(2,1,1)
+f7 = figure('Position',[300 200 1100 600]);
 plot_time_series([kor_gdpdef,kor_cpi], ...
     1:20:kor_T,kor_xtick_labels1, ...
     'Price Indices (KOREA)', ...
     {'KOR GDPDEF', 'KOR CPI'}, 1)
+save_as_html(f7,save_folder,'figure4a')
 
-subplot(2,1,2)
+f8 = figure('Position',[300 200 1100 600]);
 plot_time_series([kor_gdpdef_inf, kor_cpi_inf], ...
     1:20:dkor_T, kor_xtick_labels2, ...
     'Inflation Rates (KOREA)', ...
     {'KOR GDPDEF Inflation', 'KOR CPI Inflation'},1)
+save_as_html(f8,save_folder,'figure4b')
 
 % f5 = figure('Position',[300 200 1100 600]);
 % subplot(4,1,1)
@@ -166,31 +167,19 @@ plot_time_series([kor_gdpdef_inf, kor_cpi_inf], ...
 % plot_time_series([kor_gdpdef_inf,adj_kor_cpi_inf3],20, kor_xtick_labels2, ...
 %     [], {'KOR GDPDEF Inflation', 'KOR CPI Inflation Lag 3'}, 0)
 
-f5 = figure('Position',[300 200 1100 600]);
-subplot(2,1,1)
-plot(us_pce,'LineWidth',2)
-yyaxis left
-ylim([0.9*min(us_pce) 1.1*max(us_pce)])
+f9 = figure('Position',[300 200 1100 600]);
+plot_yyaxis(us_pce,[us_gdpdef, us_cpi, us_ppi], 1:20:us_T, us_xtick_labels1, ...
+    'Price Indices (US)', {'US PCE','US GDPDEF','US CPI','US PPI'},1)
+save_as_html(f9,save_folder,'figure5a')
 
-yyaxis right
-p1 = plot([us_gdpdef,us_cpi,us_ppi],'LineWidth',2);
-set(p1(1), 'LineStyle', '-', 'Color', [0.8500, 0.3250, 0.0980])
-set(p1(2), 'LineStyle', '-', 'Color', [0.9290, 0.6940, 0.1250])
-set(p1(3), 'LineStyle', '-', 'Color', [0.4940, 0.1840, 0.5560])
-axis(get_axis_range([us_gdpdef,us_cpi,us_ppi]))
-xticks(1:20:us_T)
-xticklabels(us_xtick_labels1)
-title('Price Indices (US)', 'FontSize', 20, 'Interpreter', 'latex')
-legend({'US PCE', 'US GDPDEF', 'US CPI', 'US PPI'},'Location', 'north', 'Orientation', 'horizontal')
-grid on
-ax = gca;
-ax.YColor = 'k';
-
-subplot(2,1,2)
+f10 = figure('Position',[300 200 1100 600]);
 plot_time_series([us_pce_inf,us_gdpdef_inf,us_cpi_inf,us_ppi_inf], ...
     4:20:dus_T,us_xtick_labels2, ...
     'Inflation Rates (US)', ...
     {'US PCE Inflation', 'US GDPDEF Inflation', 'US CPI Inflation', 'US PPI Inflation'}, 1)
+save_as_html(f10,save_folder,'figure5b')
+
+return
 
 %% 6. Plotting Main Macro Variables for Korea and the US
 % (1) Korea
