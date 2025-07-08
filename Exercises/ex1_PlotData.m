@@ -10,7 +10,7 @@ close all
 rng(123)
 
 addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/Exercises")
-addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/TS_lib")
+addpath(genpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/TS_lib"))
 
 kor_xtick_labels1 = {'2000','2005','2010','2015','2020','2025'};
 kor_xtick_labels2 = {'2001','2006','2011','2016','2021'};
@@ -47,6 +47,8 @@ plot_time_series([kor_RGDPNSA, kor_RGDPSA], ...
     1:20:kor_T,kor_xtick_labels1, ...
     'KOR RGDP Seasonally Adjusted vs Not Seasonally Adjusted', ...
     {'KOR RGDPNSA', 'KOR RGDPSA'}, 1)
+
+fig2plotly(f1, 'offline', true, 'figure1', 'figure1');
 
 % 2-(2) US
 us_NGDPSA = US_data(:,1)./4; % Seasonally Adjusted Annualized Rate to Quarterly
