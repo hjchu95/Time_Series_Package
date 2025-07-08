@@ -1,0 +1,142 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This exercise plots the macro data of the US.
+
+% Written by Hyun Jae Stephen Chu
+% July 8th, 2025
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 0. Settings
+clear;clc;
+close all
+rng(123)
+
+addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/Exercises")
+addpath(genpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/TS_lib"))
+
+us_xtick_labels1 = {'1960','1965','1970','1975','1980','1985','1990','1995','2000','2005','2010','2015','2020','2025'};
+us_xtick_labels2 = {'1961','1966','1971','1976','1981','1986','1991','1996','2001','2006','2011','2016','2021'};
+
+save_folder = 'ex1_1_results';
+
+%% 1. Loading Data
+US_data = readmatrix("tsdata_20250704.xlsx",'Sheet','US','Range','B2:O262');
+% 1960 Q1 ~ 2025 Q1
+% NGDPSA, NGDPNSA, RGDPSA, RGDPNSA, GDPDEF, PCE, CPI, PPI, FFE, T10Y,
+% T10M3Y, UNEMP, WTI
+
+%% 2. Comparing Seasonally Adjusted Data
+us_NGDPSA = US_data(:,1)./4; % Seasonally Adjusted Annualized Rate to Quarterly
+us_NGDPNSA = US_data(:,2)*0.001; % millions of dollars to billions of dollars
+us_RGDPSA = US_data(:,3)./4; % Seasonally Adjusted Annualized Rate to Quarterly
+us_RGDPNSA = US_data(:,4);
+
+us_T = rows(us_NGDPNSA);
+
+f1 = figure('Position',[300 200 1100 600]);
+plot_time_series([us_NGDPNSA, us_NGDPSA], ...
+    1:20:us_T,us_xtick_labels1, ...
+    'US NGDP Seasonally Adjusted vs Not Seasonally Adjusted', ...
+    {'US NGDPNSA', 'US NGDPSA'}, 1)
+save_as_html(f1,save_folder,'figure1a')
+
+f2 = figure('Position',[300 200 1100 600]);
+plot_time_series([us_RGDPNSA, us_RGDPSA], ...
+    1:20:us_T,us_xtick_labels1, ...
+    'US RGDP Seasonally Adjusted vs Not Seasonally Adjusted', ...
+    {'US RGDPNSA', 'US RGDPSA'}, 1)
+save_as_html(f2,save_folder,'figure1b')
+
+%% 3. Comparing Nominal and Real GDP
+f3 = figure('Position',[300 200 1100 600]);
+plot_time_series([us_NGDPSA, us_RGDPSA], ...
+    1:20:us_T,us_xtick_labels1, ...
+    'US NGDPSA vs RGDPSA', ...
+    {'US NGDPSA', 'US RGDPSA'}, 1)
+save_as_html(f3,save_folder,'figure2')
+
+% <Thoughts>
+% Before 2017, Real GDP is larger than the Nominal GDP.
+% This is because the Real GDP is derived by using the chain-weighted
+% method where the base year is 2017.
+% By chain-weighting, the goods and services prior to 2017 are weighted to
+% match the value post-2017.
+% As the pre-2017 economy has relatively cheaper and less productive
+% structure, the real GDP weighted by the price of 2017 is over-weighted 
+% and the pre-2017 real GDP is measured to be higher than that of the nominal GDP.
+
+%% 4. Converting Variables
+us_change = [US_data(:,3),US_data(:,5:8)];
+us_int = US_data(2:end,9:12);
+us_unemp = US_data(2:end,13);
+WTI = US_data(2:end,14);
+
+us_y_inf = pc_diff(us_change,2);
+
+%% 5. Comparing Price Index and Inflation Rate
+us_gdpdef = US_data(:,5);
+us_pce = US_data(:,6);
+us_cpi = US_data(:,7);
+us_ppi = US_data(:,8);
+us_gdpdef_inf = us_y_inf(:,2);
+us_pce_inf = us_y_inf(:,3);
+us_cpi_inf = us_y_inf(:,4);
+us_ppi_inf = us_y_inf(:,5);
+
+dus_T = rows(us_gdpdef_inf);
+
+f4 = figure('Position',[300 200 1100 600]);
+plot_yyaxis(us_pce,[us_gdpdef, us_cpi, us_ppi], 1:20:us_T, us_xtick_labels1, ...
+    'Price Indices (US)', {'US PCE','US GDPDEF','US CPI','US PPI'},1)
+save_as_html(f4,save_folder,'figure3a')
+
+f5 = figure('Position',[300 200 1100 600]);
+plot_time_series([us_pce_inf,us_gdpdef_inf,us_cpi_inf,us_ppi_inf], ...
+    4:20:dus_T,us_xtick_labels2, ...
+    'Inflation Rates (US)', ...
+    {'US PCE Inflation', 'US GDPDEF Inflation', 'US CPI Inflation', 'US PPI Inflation'}, 1)
+save_as_html(f5,save_folder,'figure3b')
+
+%% 6. Plotting Main Macro Variables for the US
+us_growth = us_y_inf(:,1);
+
+f6 = figure('Position',[300 200 1100 600]);
+plot_yyaxis(us_growth,us_unemp,4:20:dus_T,us_xtick_labels2, ...
+    [],{'Growth','Unemployment'},0)
+save_as_html(f6,save_folder,'figure4a')
+
+f7 = figure('Position',[300 200 1100 600]);
+plot_time_series([us_pce_inf,us_gdpdef_inf,us_cpi_inf,us_ppi_inf], ...
+    4:20:dus_T,us_xtick_labels2, ...
+    [], {'US PCE Inflation', 'US GDPDEF Inflation', 'US CPI Inflation', 'US PPI Inflation'}, 0)
+save_as_html(f7,save_folder,'figure4b')
+
+f8 = figure('Position',[300 200 1100 600]);
+plot_time_series(us_int(:,1:3), ...
+    4:20:dus_T, us_xtick_labels2, ...
+    [], {'FEDFUNDS','TB3M', 'TB10Y'}, 0)
+save_as_html(f8,save_folder,'figure4c')
+
+f9 = figure('Position',[300 200 1100 600]);
+plot_time_series(WTI, ...
+    4:20:dus_T, us_xtick_labels2, ...
+    [], {'WTI'}, 0)
+save_as_html(f9,save_folder,'figure4d')
+
+%% 7. Comparing Annual Growth Rates
+us_ngdp_growth = pc_diff(US_data(:,1),2);
+us_rgdp_growth = us_growth;
+us_gdpdef_growth = us_gdpdef_inf;
+
+us_ngdp_qg = meanc(us_ngdp_growth);
+us_ngdp_ag = 4*us_ngdp_qg;
+s1 = sprintf("Annual US NGDP Growth = %2.2f", us_ngdp_ag);
+disp(s1)
+
+us_rgdp_qg = meanc(us_rgdp_growth);
+us_rgdp_ag = 4*us_rgdp_qg;
+s2 = sprintf("Annual US RGDP Growth = %2.2f", us_rgdp_ag);
+disp(s2)
+
+us_gdpdef_qg = meanc(us_gdpdef_growth);
+us_gdpdef_ag = 4*us_gdpdef_qg;
+s3 = sprintf("Annual US GDPDEF Growth = %2.2f", us_gdpdef_ag);
+disp(s3)
