@@ -17,6 +17,8 @@ kor_xtick_labels2 = {'2001','2006','2011','2016','2021'};
 us_xtick_labels1 = {'1960','1965','1970','1975','1980','1985','1990','1995','2000','2005','2010','2015','2020','2025'};
 us_xtick_labels2 = {'1961','1966','1971','1976','1981','1986','1991','1996','2001','2006','2011','2016','2021'};
 
+save_folder = 'ex1_results';
+
 %% 1. Loading Data
 KOR_data = readmatrix("tsdata_20250704.xlsx",'Sheet','KOR','Range','B2:M102');
 % 2000 Q1 ~ 2025 Q1
@@ -36,19 +38,20 @@ kor_RGDPNSA = KOR_data(:,4);
 kor_T = rows(kor_NGDPNSA);
 
 f1 = figure('Position',[300 200 1100 600]);
-subplot(2,1,1)
 plot_time_series([kor_NGDPNSA,kor_NGDPSA], ...
     1:20:kor_T,kor_xtick_labels1, ...
     'KOR NGDP Seasonally Adjusted vs Not Seasonally Adjusted', ...
     {'KOR NGDPNSA', 'KOR NGDPSA'}, 1)
+save_as_html(f1,save_folder,'figure1a')
 
-subplot(2,1,2)
+f2 = figure('Position',[300 200 1100 600]);
 plot_time_series([kor_RGDPNSA, kor_RGDPSA], ...
     1:20:kor_T,kor_xtick_labels1, ...
     'KOR RGDP Seasonally Adjusted vs Not Seasonally Adjusted', ...
     {'KOR RGDPNSA', 'KOR RGDPSA'}, 1)
+save_as_html(f2,save_folder,'figure1b')
 
-fig2plotly(f1, 'offline', true, 'figure1', 'figure1');
+return
 
 % 2-(2) US
 us_NGDPSA = US_data(:,1)./4; % Seasonally Adjusted Annualized Rate to Quarterly

@@ -2,7 +2,7 @@ function response = plotlyoffline(plotlyfig)
     % Generate offline Plotly figure saved as an html file within 
     % the current working directory. The file will be saved as: 
     % 'plotlyfig.PlotOptions.FileName'.html. 
-    
+
     % create dependency string unless not required
     if plotlyfig.PlotOptions.IncludePlotlyjs
         % grab the bundled dependencies
@@ -90,4 +90,5 @@ function response = plotlyoffline(plotlyfig)
     
     % return the local file url to be rendered in the browser
     response = ['file:///' plotlyOfflineFile]; 
+
 end
