@@ -159,10 +159,8 @@ data = [kor_ngdp_qg,kor_ngdp_ag;kor_rgdp_qg,kor_rgdp_ag;kor_gdpdef_qg,kor_gdpdef
 
 rowNames = {'NGDP'; 'RGDP'; 'GDPDEF'};
 colNames = {'  Quarterly','  Annual'};
-
-fprintf('Full-sample: 1960 Q2 - 2025 Q1\n')
 fprintf('%-10s %10s %10s\n', 'Variable', colNames{:});
-fprintf('%s\n', repmat('-', 1, 32));
+fprintf('%s\n', repmat('-', 1, 32));  % 구분선
 for i = 1:length(rowNames)
     fprintf('%-10s   %10.2f   %10.2f\n', rowNames{i}, data(i,1), data(i,2));
 end

@@ -128,22 +128,18 @@ us_gdpdef_growth = us_gdpdef_inf;
 
 us_ngdp_qg = meanc(us_ngdp_growth);
 us_ngdp_ag = 4*us_ngdp_qg;
+s1 = sprintf("Annual US NGDP Growth = %2.2f", us_ngdp_ag);
+disp(s1)
 
 us_rgdp_qg = meanc(us_rgdp_growth);
 us_rgdp_ag = 4*us_rgdp_qg;
+s2 = sprintf("Annual US RGDP Growth = %2.2f", us_rgdp_ag);
+disp(s2)
 
 us_gdpdef_qg = meanc(us_gdpdef_growth);
 us_gdpdef_ag = 4*us_gdpdef_qg;
-
-data = [us_ngdp_qg,us_ngdp_ag;us_rgdp_qg,us_rgdp_ag;us_gdpdef_qg,us_gdpdef_ag];
+s3 = sprintf("Annual US GDPDEF Growth = %2.2f", us_gdpdef_ag);
+disp(s3)
 
 rowNames = {'NGDP'; 'RGDP'; 'GDPDEF'};
-colNames = {'  Quarterly','  Annual'};
-
-fprintf('Full-sample: 1960 Q2 - 2025 Q1\n')
-fprintf('%-10s %10s %10s\n', 'Variable', colNames{:});
-fprintf('%s\n', repmat('-', 1, 32));
-for i = 1:length(rowNames)
-    fprintf('%-10s   %10.2f   %10.2f\n', rowNames{i}, data(i,1), data(i,2));
-end
-
+colNames = {'Quarterly','Annual'};
