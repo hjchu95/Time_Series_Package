@@ -20,5 +20,11 @@ function save_as_html(figure,folder,filename)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 p = fig2plotly(figure, 'offline', true, 'filename', fullfile(folder, filename), 'open', false);
 p.layout.legend.orientation = 'h';
-p.layout.legend.x = 0.45;
+p.layout.legend.x = 0.36;
+p.layout.legend.y = 0.84;
+p.layout.width = 700;
+p.layout.height = 450;
+
+p.layout.margin = struct('t', 30, 'l', 5, 'r', 5, 'b', 10);
+
 plotlyoffline(p);
