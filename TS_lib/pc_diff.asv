@@ -1,4 +1,4 @@
-function dy = ts_diff(y,option)
+function dy = pc_diff(y,option)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Deriving the percent change of variable by YoY or QoQ
 
