@@ -12,7 +12,7 @@ function dy = ts_diff(y,option)
 %   dy: Output variable (percent change of y)
 
 % Written by Hyun Jae Stephen Chu
-% July 4th, 2025
+% July 12th, 2025
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [T,K] = size(y);
 
