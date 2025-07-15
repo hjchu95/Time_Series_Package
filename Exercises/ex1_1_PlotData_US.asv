@@ -23,7 +23,7 @@ fig_option = struct( ...
     'legy', 0.84, ...
     'width', 700, ...
     'height', 450, ...
-    'margin', struct('t', 30, 'l', 5, 'r', 5, 'b', 10) ...
+    'margin', struct('t', 10, 'l', 5, 'r', 5, 'b', 10) ...
     );
 fig_option_onevar = struct( ...
     'legori','h', ...
@@ -32,7 +32,7 @@ fig_option_onevar = struct( ...
     'legy', 0.84, ...
     'width', 700, ...
     'height', 450, ...
-    'margin', struct('t', 30, 'l', 5, 'r', 5, 'b', 10) ...
+    'margin', struct('t', 10, 'l', 5, 'r', 5, 'b', 10) ...
     );
 fig_option_two = struct( ...
     'width', 700, ...
@@ -73,14 +73,20 @@ us_T = rows(us_NGDPNSA);
 % legend({'US NGDPNSA','US NGDPSA'})
 % grid on
 % save_as_html(f1,save_folder,'figure1a',fig_option_two)
+
 f1 = figure('Position',[300 200 1100 600]);
 plot_time_series([us_NGDPNSA, us_NGDPSA], ...
     1:20:us_T,us_xtick_labels1, ...
     'US NGDP Seasonally Adjusted vs Not Seasonally Adjusted', ...
-    {'US NGDPNSA','US NGDPSA'},1)
-save_as_html(f1,save_folder,'figure1aa',fig_option)
+    {'US NGDPNSA','US NGDPSA'},0)
+save_as_html(f1,save_folder,'figure1a',fig_option)
 
-
+f2 = figure('Position',[300 200 1100 600]);
+plot_time_series([log(us_NGDPNSA), log(us_NGDPSA)], ...
+    1:20:us_T,us_xtick_labels1, ...
+    'US log NGDP Seasonally Adjusted vs Not Seasonally Adjusted', ...
+    {'US NGDPNSA','US NGDPSA'},0)
+save_as_html(f2,save_folder,'figure1b',fig_option)
 
 us_NGDPNSA_qoq = ts_diff(us_NGDPNSA,'qoq_diff');
 dus_T = rows(us_NGDPNSA_qoq);
@@ -88,8 +94,8 @@ f10 = figure('Position',[300 200 1100 600]);
 plot_time_series(us_NGDPNSA_qoq, ...
     4:20:dus_T,us_xtick_labels2, ...
     'US NGDP NSA Quarter-on-Quarter Difference (QoQ)', ...
-    {'US NGDPNSA QoQ'}, 1)
-save_as_html(f10,save_folder,'figure1b',fig_option_onevar)
+    {'US NGDPNSA QoQ Difference'}, 0)
+save_as_html(f10,save_folder,'figure1c',fig_option_onevar)
 
 us_NGDPNSA_qoqdiff = ts_diff(us_NGDPNSA,'qoq_gr');
 dus_T = rows(us_NGDPNSA_qoq);
@@ -97,8 +103,8 @@ f11 = figure('Position',[300 200 1100 600]);
 plot_time_series(us_NGDPNSA_qoqdiff, ...
     4:20:dus_T,us_xtick_labels2, ...
     'US NGDP NSA Quarterly Growth Rate', ...
-    {'US NGDPNSA QoQ'}, 1)
-save_as_html(f11,save_folder,'figure1c',fig_option_onevar)
+    {'US NGDPNSA QoQ Growth Rate'}, 0)
+save_as_html(f11,save_folder,'figure1d',fig_option_onevar)
 
 us_NGDPNSA_yoydiff = ts_diff(us_NGDPNSA,'yoy_diff');
 dus_T = rows(us_NGDPNSA_yoydiff);
@@ -106,8 +112,8 @@ f12 = figure('Position',[300 200 1100 600]);
 plot_time_series(us_NGDPNSA_yoydiff, ...
     1:20:dus_T,us_xtick_labels2, ...
     'US NGDP NSA Year-on-Year Difference (YoY)', ...
-    {'US NGDPNSA QoQ'}, 1)
-save_as_html(f12,save_folder,'figure1d',fig_option_onevar)
+    {'US NGDPNSA YoY Difference'}, 0)
+save_as_html(f12,save_folder,'figure1e',fig_option_onevar)
 
 us_NGDPNSA_yoy = ts_diff(us_NGDPNSA,'yoy_gr');
 dus_T = rows(us_NGDPNSA_yoy);
@@ -115,18 +121,53 @@ f13 = figure('Position',[300 200 1100 600]);
 plot_time_series(us_NGDPNSA_yoy, ...
     1:20:dus_T,us_xtick_labels2, ...
     'US NGDP NSA Annual Growth Rate', ...
-    {'US NGDPNSA YoY'}, 1)
-save_as_html(f13,save_folder,'figure1e',fig_option_onevar)
-
-return
+    {'US NGDPNSA YoY Growth Rate'}, 0)
+save_as_html(f13,save_folder,'figure1f',fig_option_onevar)
 
 %% 3. Comparing Nominal and Real GDP
 f3 = figure('Position',[300 200 1100 600]);
-plot_time_series([us_NGDPSA, us_RGDPSA], ...
+plot_time_series([log(us_NGDPSA), log(us_RGDPSA)], ...
     1:20:us_T,us_xtick_labels1, ...
     'US NGDPSA vs RGDPSA', ...
-    {'US NGDPSA', 'US RGDPSA'}, 1)
+    {'US NGDPSA', 'US RGDPSA'}, 0)
 save_as_html(f3,save_folder,'figure2',fig_option)
+
+% Converting Variables
+us_change = [US_data(:,3),US_data(:,5:8)];
+us_int = US_data(2:end,9:12);
+us_unemp = US_data(2:end,13);
+WTI = US_data(2:end,14);
+
+us_y_inf = ts_diff(us_change,'qoq_gr');
+us_growth = us_y_inf(:,1);
+
+%Comparing Annual Growth Rates
+us_ngdp_growth = ts_diff(US_data(:,1),'qoq_gr');
+us_rgdp_growth = us_growth;
+us_gdpdef_growth = us_gdpdef_inf;
+
+us_ngdp_qg = meanc(us_ngdp_growth);
+us_ngdp_ag = 4*us_ngdp_qg;
+
+us_rgdp_qg = meanc(us_rgdp_growth);
+us_rgdp_ag = 4*us_rgdp_qg;
+
+us_gdpdef_qg = meanc(us_gdpdef_growth);
+us_gdpdef_ag = 4*us_gdpdef_qg;
+
+data = [us_ngdp_qg,us_ngdp_ag;us_rgdp_qg,us_rgdp_ag;us_gdpdef_qg,us_gdpdef_ag];
+
+rowNames = {'NGDP'; 'RGDP'; 'GDPDEF'};
+colNames = {'  Quarterly','  Annual'};
+
+fprintf('Full-sample: 1960 Q2 - 2025 Q1\n')
+fprintf('%-10s %10s %10s\n', 'Variable', colNames{:});
+fprintf('%s\n', repmat('-', 1, 32));
+for i = 1:length(rowNames)
+    fprintf('%-10s   %10.2f   %10.2f\n', rowNames{i}, data(i,1), data(i,2));
+end
+
+return
 
 % <Thoughts>
 % Before 2017, Real GDP is larger than the Nominal GDP.
@@ -138,15 +179,7 @@ save_as_html(f3,save_folder,'figure2',fig_option)
 % structure, the real GDP weighted by the price of 2017 is over-weighted 
 % and the pre-2017 real GDP is measured to be higher than that of the nominal GDP.
 
-%% 4. Converting Variables
-us_change = [US_data(:,3),US_data(:,5:8)];
-us_int = US_data(2:end,9:12);
-us_unemp = US_data(2:end,13);
-WTI = US_data(2:end,14);
-
-us_y_inf = ts_diff(us_change,'qoq_gr');
-
-%% 5. Comparing Price Index and Inflation Rate
+%% 4. Comparing Price Index and Inflation Rate
 us_gdpdef = US_data(:,5);
 us_pce = US_data(:,6);
 us_cpi = US_data(:,7);
@@ -170,9 +203,7 @@ plot_time_series([us_pce_inf,us_gdpdef_inf,us_cpi_inf,us_ppi_inf], ...
     {'US PCE Inflation', 'US GDPDEF Inflation', 'US CPI Inflation', 'US PPI Inflation'}, 1)
 save_as_html(f5,save_folder,'figure3b',fig_option)
 
-%% 6. Plotting Main Macro Variables for the US
-us_growth = us_y_inf(:,1);
-
+%% 5. Plotting Main Macro Variables for the US
 f6 = figure('Position',[300 200 1100 600]);
 plot_yyaxis(us_growth,us_unemp,4:20:dus_T,us_xtick_labels2, ...
     [],{'Growth','Unemployment'},0)
