@@ -124,15 +124,12 @@ plot_time_series(us_NGDPNSA_yoy, ...
     {'US NGDPNSA YoY Growth Rate'}, 0)
 save_as_html(f13,save_folder,'figure1f',fig_option_onevar)
 
-%% 3. Comparing Nominal and Real GDP
-f3 = figure('Position',[300 200 1100 600]);
-plot_time_series([log(us_NGDPSA), log(us_RGDPSA)], ...
-    1:20:us_T,us_xtick_labels1, ...
-    'US NGDPSA vs RGDPSA', ...
-    {'US NGDPSA', 'US RGDPSA'}, 0)
-save_as_html(f3,save_folder,'figure2',fig_option)
+T = rows(us_NGDPNSA);
+us_NGDPNSA_ma = zeros(T-4,1);
+for t = 1:T-4
+    us_NGDPNSA_ma(t,1) = us_NGDPNSA()
 
-% Converting Variables
+%% 3. Converting Variables
 us_change = [US_data(:,3),US_data(:,5:8)];
 us_int = US_data(2:end,9:12);
 us_unemp = US_data(2:end,13);
@@ -141,7 +138,26 @@ WTI = US_data(2:end,14);
 us_y_inf = ts_diff(us_change,'qoq_gr');
 us_growth = us_y_inf(:,1);
 
-%Comparing Annual Growth Rates
+us_gdpdef = US_data(:,5);
+us_pce = US_data(:,6);
+us_cpi = US_data(:,7);
+us_ppi = US_data(:,8);
+us_gdpdef_inf = us_y_inf(:,2);
+us_pce_inf = us_y_inf(:,3);
+us_cpi_inf = us_y_inf(:,4);
+us_ppi_inf = us_y_inf(:,5);
+
+dus_T = rows(us_gdpdef_inf);
+
+%% 4. Comparing Nominal and Real GDP
+f3 = figure('Position',[300 200 1100 600]);
+plot_time_series([log(us_NGDPSA), log(us_RGDPSA)], ...
+    1:20:us_T,us_xtick_labels1, ...
+    'US NGDPSA vs RGDPSA', ...
+    {'US NGDPSA', 'US RGDPSA'}, 0)
+save_as_html(f3,save_folder,'figure2',fig_option)
+
+% Comparing Annual Growth Rates
 us_ngdp_growth = ts_diff(US_data(:,1),'qoq_gr');
 us_rgdp_growth = us_growth;
 us_gdpdef_growth = us_gdpdef_inf;
@@ -179,18 +195,7 @@ return
 % structure, the real GDP weighted by the price of 2017 is over-weighted 
 % and the pre-2017 real GDP is measured to be higher than that of the nominal GDP.
 
-%% 4. Comparing Price Index and Inflation Rate
-us_gdpdef = US_data(:,5);
-us_pce = US_data(:,6);
-us_cpi = US_data(:,7);
-us_ppi = US_data(:,8);
-us_gdpdef_inf = us_y_inf(:,2);
-us_pce_inf = us_y_inf(:,3);
-us_cpi_inf = us_y_inf(:,4);
-us_ppi_inf = us_y_inf(:,5);
-
-dus_T = rows(us_gdpdef_inf);
-
+%% 5. Comparing Price Index and Inflation Rate
 f4 = figure('Position',[300 200 1100 600]);
 plot_yyaxis(us_pce,[us_gdpdef, us_cpi, us_ppi], 1:20:us_T, us_xtick_labels1, ...
     'Price Indices (US)', {'US PCE','US GDPDEF','US CPI','US PPI'},1)
@@ -203,7 +208,7 @@ plot_time_series([us_pce_inf,us_gdpdef_inf,us_cpi_inf,us_ppi_inf], ...
     {'US PCE Inflation', 'US GDPDEF Inflation', 'US CPI Inflation', 'US PPI Inflation'}, 1)
 save_as_html(f5,save_folder,'figure3b',fig_option)
 
-%% 5. Plotting Main Macro Variables for the US
+%% 6. Plotting Main Macro Variables for the US
 f6 = figure('Position',[300 200 1100 600]);
 plot_yyaxis(us_growth,us_unemp,4:20:dus_T,us_xtick_labels2, ...
     [],{'Growth','Unemployment'},0)
@@ -226,30 +231,3 @@ plot_time_series(WTI, ...
     4:20:dus_T, us_xtick_labels2, ...
     [], {'WTI'}, 0)
 save_as_html(f9,save_folder,'figure4d',fig_option)
-
-%% 7. Comparing Annual Growth Rates
-us_ngdp_growth = ts_diff(US_data(:,1),'qoq_gr');
-us_rgdp_growth = us_growth;
-us_gdpdef_growth = us_gdpdef_inf;
-
-us_ngdp_qg = meanc(us_ngdp_growth);
-us_ngdp_ag = 4*us_ngdp_qg;
-
-us_rgdp_qg = meanc(us_rgdp_growth);
-us_rgdp_ag = 4*us_rgdp_qg;
-
-us_gdpdef_qg = meanc(us_gdpdef_growth);
-us_gdpdef_ag = 4*us_gdpdef_qg;
-
-data = [us_ngdp_qg,us_ngdp_ag;us_rgdp_qg,us_rgdp_ag;us_gdpdef_qg,us_gdpdef_ag];
-
-rowNames = {'NGDP'; 'RGDP'; 'GDPDEF'};
-colNames = {'  Quarterly','  Annual'};
-
-fprintf('Full-sample: 1960 Q2 - 2025 Q1\n')
-fprintf('%-10s %10s %10s\n', 'Variable', colNames{:});
-fprintf('%s\n', repmat('-', 1, 32));
-for i = 1:length(rowNames)
-    fprintf('%-10s   %10.2f   %10.2f\n', rowNames{i}, data(i,1), data(i,2));
-end
-
