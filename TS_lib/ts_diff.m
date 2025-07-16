@@ -1,12 +1,14 @@
 function dy = ts_diff(y,option)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Deriving the percent change of variable by YoY or QoQ
+% Transformation of the variable by differencing
 
 % Args:
 %   y: Input variable (multivariate)
-%   option: Method of deriving the percent change
-%       1 = Year-on-year, dy_{t} = log(y_{t}) - log(y_{t-4})
-%       2 = Quarter-on-quarter, dy_{t} = log(y_{t}) - log(y_{t-1})
+%   option: Method of transformation
+%       qoq_diff = Quarter-on-quarter differencing, dy_{t} = y_{t} - y_{t-1}
+%       yoy_diff = Year-on-year differencing, dy_{t} = y_{t} - y_{t-4}
+%       qoq_gr = Quarter-on-quarter growth rate, dy_{t} = log(y_{t}) - log(y_{t-1})
+%       yoy_gr = Year-on-year growth rate, dy_{t} = log(y_{t}) - log(y_{t-4})
 
 % Returns:
 %   dy: Output variable (percent change of y)
