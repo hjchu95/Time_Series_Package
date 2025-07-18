@@ -205,27 +205,15 @@ plot_time_series(us_gdpdef_inf, ...
 save_as_html(f7b,save_folder,'figure7b',fig_option_onevar)
 
 %% 5. Comparing Price Index and Inflation Rate
-f8 = figure('Position',[300 200 1100 600]);
-plot_yyaxis(us_pce,[us_gdpdef, us_cpi, us_ppi], 1:20:us_T, us_xtick_labels1, ...
-    'Price Indices (US)', {'US PCE','US GDPDEF','US CPI','US PPI'},1)
-save_as_html(f8,save_folder,'figure8',fig_option_fourvar)
-
-f9 = figure('Position',[300 200 1100 600]);
-plot_time_series([us_pce_inf,us_gdpdef_inf,us_cpi_inf,us_ppi_inf], ...
-    4:20:dus_T,us_xtick_labels2, ...
-    'Inflation Rates (US)', ...
-    {'US PCE', 'US GDPDEF', 'US CPI', 'US PPI'}, 1)
-save_as_html(f9,save_folder,'figure9',fig_option_fourvar)
-
-f10a = figure('Position',[300 200 1100 600]);
+f8a = figure('Position',[300 200 1100 600]);
 plot_time_series([log(us_gdpdef),log(us_cpi)], 1:20:us_T, us_xtick_labels1, ...
-    'Price Indices (US)', {'US GDPDEF','US CPI'},0)
-save_as_html(f10a,save_folder,'figure10a',fig_option)
+    'Price Indices (US)', {'log(US GDPDEF)','log(US CPI)'},0)
+save_as_html(f8a,save_folder,'figure8a',fig_option)
 
-f10b = figure('Position',[300 200 1100 600]);
+f8b = figure('Position',[300 200 1100 600]);
 plot_time_series([us_gdpdef_inf,us_cpi_inf], 1:20:dus_T, us_xtick_labels2, ...
     'Price Indices (US)', {'US GDPDEF','US CPI'},0)
-save_as_html(f10b,save_folder,'figure10b',fig_option)
+save_as_html(f8b,save_folder,'figure8b',fig_option)
 
 us_gdpdef_inf_qg = meanc(us_gdpdef_inf);
 us_gdpdef_inf_ag = 4*us_gdpdef_inf_qg;
@@ -241,7 +229,7 @@ data1 = [us_gdpdef_inf_qg,us_gdpdef_inf_ag,us_gdpdef_inf_std;
 rowNames = {'GDPDEF'; 'CPI'};
 colNames = {'  Quarterly','  Annual', 'Std'};
 
-fprintf('Full-sample: 1960 Q2 - 2025 Q1\n')
+fprintf('\nFull-sample: 1960 Q2 - 2025 Q1\n')
 fprintf('%-10s %10s %10s %10s\n', 'Variable', colNames{:});
 fprintf('%s\n', repmat('-', 1, 32));
 for i = 1:length(rowNames)
@@ -249,6 +237,18 @@ for i = 1:length(rowNames)
 end
 
 return
+
+f8 = figure('Position',[300 200 1100 600]);
+plot_yyaxis(us_pce,[us_gdpdef, us_cpi, us_ppi], 1:20:us_T, us_xtick_labels1, ...
+    'Price Indices (US)', {'US PCE','US GDPDEF','US CPI','US PPI'},1)
+save_as_html(f8,save_folder,'figure8',fig_option_fourvar)
+
+f9 = figure('Position',[300 200 1100 600]);
+plot_time_series([us_pce_inf,us_gdpdef_inf,us_cpi_inf,us_ppi_inf], ...
+    4:20:dus_T,us_xtick_labels2, ...
+    'Inflation Rates (US)', ...
+    {'US PCE', 'US GDPDEF', 'US CPI', 'US PPI'}, 1)
+save_as_html(f9,save_folder,'figure9',fig_option_fourvar)
 
 %% 6. Plotting Main Macro Variables for the US
 f13a = figure('Position',[300 200 1100 600]);
