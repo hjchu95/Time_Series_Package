@@ -47,6 +47,7 @@ result_df = table('Size',sz,'VariableTypes',VarType,'VariableNames',VarName);
 
 result_df(1,:) = {BoxPierce, LjungBox};
 result_df(2,:) = {pval_BP, pval_LB};
+disp(" ")
 disp(result_df)
 disp("* H0:r(1)=r(2)=...=r(h)=0 (Process is White Noise)")
 disp("** sig level < p-value = reject H0 under sig level,")

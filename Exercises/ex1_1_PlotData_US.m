@@ -1,6 +1,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This exercise plots the macro data of the US.
 
+% The "tsdata_date.xlsx" file obtained from ex0_openAPI.m is necessary to
+% run the code below.
+
 % Written by Hyun Jae Stephen Chu
 % July 8th, 2025
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,26 +66,6 @@ us_RGDPNSA = US_data(:,4);
 
 us_T = rows(us_NGDPNSA);
 
-% f1 = figure('Position',[300 200 1100 600]);
-% subplot(2,1,1)
-% plot([us_NGDPNSA, us_NGDPSA],'LineWidth',2)
-% axis(get_axis_range([us_NGDPNSA, us_NGDPSA]))
-% xticks(1:20:us_T);
-% xticklabels(us_xtick_labels1)
-% title('Figure1-(a). US NGDP Seasonally Adjusted vs Not Seasonally Adjusted','FontSize',15,'Interpreter','latex')
-% legend({'US NGDPNSA', 'US NGDPSA'})
-% grid on
-% 
-% subplot(2,1,2)
-% plot([log(us_NGDPNSA), log(us_NGDPSA)],'LineWidth',2)
-% axis(get_axis_range([log(us_NGDPNSA), log(us_NGDPSA)]))
-% xticks(1:20:us_T);
-% xticklabels(us_xtick_labels1)
-% title('Figure1-(b). US log NGDP Seasonally Adjusted vs Not Seasonally Adjusted','FontSize',15,'Interpreter','latex')
-% legend({'US NGDPNSA','US NGDPSA'})
-% grid on
-% save_as_html(f1,save_folder,'figure1a',fig_option_two)
-
 f1 = figure('Position',[300 200 1100 600]);
 plot_time_series([us_NGDPNSA, us_NGDPSA], ...
     1:20:us_T,us_xtick_labels1, ...
@@ -127,22 +110,21 @@ plot_time_series(us_NGDPNSA_yoy, ...
 save_as_html(f5,save_folder,'figure5',fig_option_onevar)
 
 %% 3. Converting Variables
-us_change = [US_data(:,3),US_data(:,5:8)];
+us_change = [US_data(:,5:8)];
 us_int = US_data(2:end,9:12);
 us_unemp = US_data(2:end,13);
 WTI = US_data(2:end,14);
 
 us_y_inf = ts_diff(us_change,'qoq_gr');
-us_growth = us_y_inf(:,1);
 
 us_gdpdef = US_data(:,5);
 us_pce = US_data(:,6);
 us_cpi = US_data(:,7);
 us_ppi = US_data(:,8);
-us_gdpdef_inf = us_y_inf(:,2);
-us_pce_inf = us_y_inf(:,3);
-us_cpi_inf = us_y_inf(:,4);
-us_ppi_inf = us_y_inf(:,5);
+us_gdpdef_inf = us_y_inf(:,1);
+us_pce_inf = us_y_inf(:,2);
+us_cpi_inf = us_y_inf(:,3);
+us_ppi_inf = us_y_inf(:,4);
 
 dus_T = rows(us_gdpdef_inf);
 
@@ -154,18 +136,10 @@ plot_time_series([log(us_NGDPSA), log(us_RGDPSA)], ...
     {'log US NGDPSA', 'log US RGDPSA'}, 0)
 save_as_html(f6,save_folder,'figure6',fig_option)
 
-% <Thoughts>
-% Before 2017, Real GDP is larger than the Nominal GDP.
-% This is because the Real GDP is derived by using the chain-weighted
-% method where the base year is 2017.
-% By chain-weighting, the goods and services prior to 2017 are weighted to
-% match the value post-2017.
-% As the pre-2017 economy has relatively cheaper and less productive
-% structure, the real GDP weighted by the price of 2017 is over-weighted 
-% and the pre-2017 real GDP is measured to be higher than that of the nominal GDP.
-
 % Comparing Annual Growth Rates
-us_ngdp_growth = ts_diff(US_data(:,1),'qoq_gr');
+% us_ngdp_growth = ts_diff(US_data(:,1),'qoq_gr');
+us_ngdp_growth = ts_diff(us_NGDPSA,'qoq_gr');
+us_growth = ts_diff(us_RGDPSA,'qoq_gr');
 us_rgdp_growth = us_growth;
 us_gdpdef_growth = us_gdpdef_inf;
 
@@ -236,21 +210,9 @@ for i = 1:length(rowNames)
     fprintf('%-10s   %10.2f   %10.2f   %10.2f\n', rowNames{i}, data1(i,1), data1(i,2), data1(i,3));
 end
 
-return
+%% 6. Plotting Labor Market Indicators
 
-f8 = figure('Position',[300 200 1100 600]);
-plot_yyaxis(us_pce,[us_gdpdef, us_cpi, us_ppi], 1:20:us_T, us_xtick_labels1, ...
-    'Price Indices (US)', {'US PCE','US GDPDEF','US CPI','US PPI'},1)
-save_as_html(f8,save_folder,'figure8',fig_option_fourvar)
-
-f9 = figure('Position',[300 200 1100 600]);
-plot_time_series([us_pce_inf,us_gdpdef_inf,us_cpi_inf,us_ppi_inf], ...
-    4:20:dus_T,us_xtick_labels2, ...
-    'Inflation Rates (US)', ...
-    {'US PCE', 'US GDPDEF', 'US CPI', 'US PPI'}, 1)
-save_as_html(f9,save_folder,'figure9',fig_option_fourvar)
-
-%% 6. Plotting Main Macro Variables for the US
+%% 7. Plotting Main Macro Variables for the US
 f13a = figure('Position',[300 200 1100 600]);
 plot_yyaxis(us_growth,us_unemp,4:20:dus_T,us_xtick_labels2, ...
     [],{'Growth','Unemployment'},0)

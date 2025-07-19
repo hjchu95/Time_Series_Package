@@ -146,8 +146,9 @@ code_dictionary = {
     'GS10', 'T10Y';
     'T10Y3MM', 'T10M3M';
 
-    % Unemployment Rate
+    % Labor Market
     'UNRATE', 'Unemp';
+    % 'EMRATIO', 'EMRatio';
 
     % Commodity
     'MCOILWTICO', 'WTI';

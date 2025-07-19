@@ -45,6 +45,7 @@ us_pce_inf = us_y_inf(:,3);
 us_cpi_inf = us_y_inf(:,4);
 us_ffe = us_int(:,1);
 us_T10Y = us_int(:,2);
+
 % 1960 Q2 - 2025 Q1
 
 % (2) Korea
@@ -65,23 +66,34 @@ kor_gov3Y = kor_int(:,4);
 % 1960 Q2 - 2025 Q1
 
 %% Autocovariance of Variables
-us_y = [us_growth,us_gdpdef_inf,us_pce_inf,us_cpi_inf,us_ffe,us_T10Y,us_unemp];
-us_var_list = {'growth','gdpdefinf','pceinf','cpiinf','ffe','T10Y','unemp'};
-ind_control = 1;
-us_var = us_y(:,ind_control);
-
 kor_y = [kor_growth,kor_gdpdef_inf,kor_cpi_inf,kor_forex_growth,kor_call,kor_cd,kor_gov1Y,kor_gov3Y,kor_unemp];
 kor_var_list = {'growth', 'gdpdefinf','cpiinf','dforex','call','cd91','gov1','gov3','unemp'}';
 ind_control = 1; % Use this as the control of choosing which variable to use
 kor_var = kor_y(:,ind_control);
 
-[acor2,bound2] = autocor(us_var,[],1);
-[acor1,bound1] = autocor(kor_var,[],1);
+us_y = [us_growth,us_gdpdef_inf,us_pce_inf,us_cpi_inf,us_ffe,us_T10Y,us_unemp];
+us_var_list = {'growth','gdpdefinf','pceinf','cpiinf','ffe','T10Y','unemp'};
+ind_control = 2;
+us_var = us_y(:,ind_control);
 
-[BoxPierce2, pval_BP2, LjungBox2, pval_LB2, tb2] = WN_test(us_var);
-[BoxPierce1, pval_BP1, LjungBox1, pval_LB1, tb1] = WN_test(kor_var);
+% (1) US
+for i = 1:length(us_y)
+    ind_control = i;
+    [~,~] = autocor(us_y(:,ind_control),[],1);
+end
+
+% (2) Korea
+for i = 1:length(kor_y)
+    ind_control = i;
+    [~,~] = autocor(kor_y(:))
+
+[autocor1, bound1] = autocor(kor_var,[],1);
+[autocor2, bound2] = autocor(us_var,[],1);
 
 return
+
+[BoxPierce1, pval_BP1, LjungBox1, pval_LB1, tb1] = WN_test(kor_var);
+[BoxPierce2, pval_BP2, LjungBox2, pval_LB2, tb2] = WN_test(us_var);
 
 %% AR OLS
 p = 4;
