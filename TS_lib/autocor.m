@@ -11,7 +11,7 @@ function [corr, bound] = autocor(X,taumax,is_plot)
 %       1 = plot figure
 
 % Returns:
-%   corr: Estimated autocovariance function, taumax+1 by 1
+%   corr: Estimated autocorrelation function, taumax+1 by 1
 %   bound: 2 standard error limits, Box et. al. (2015) pp. 33.
 
 % Written by Hyun Jae Stephen Chu
@@ -39,13 +39,15 @@ bound = [2*sqrt(1/T), -2*sqrt(1/T)]; % 2 standard error limits, Box et. at. (201
 
 if is_plot == 1
     figure
-    stem((0:rows(corr)-1)', corr, 'filled', '-o', 'MarkerSize', 4, 'SeriesIndex' ,2, 'Tag', 'ACF')
+    stem((0:rows(corr)-1)', corr, 'filled', '-o', 'MarkerSize', 4, 'LineWidth', 1.3, 'SeriesIndex' ,2, 'Tag', 'ACF')
     title('Sample Autocorrelation Function', 'FontSize', 20, 'interpreter', 'latex')
     xlabel('Lag', 'FontSize', 15, 'interpreter', 'latex')
     ylabel('Sample Autocorrelation', 'FontSize', 15, 'interpreter', 'latex')
+    yl = ylim;
+    ylim([yl(1), min(1.05, yl(2)*1.05)])
     hold on
-    yline(bound(:,1), '-b')
-    yline(bound(:,2), '-b')
+    yline(bound(:,1), '-b','LineWidth',1.3)
+    yline(bound(:,2), '-b','LineWidth',1.3)
     grid on
 end
 

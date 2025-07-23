@@ -17,6 +17,14 @@ rng(123)
 addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/Exercises")
 addpath(genpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/TS_lib"))
 
+save_folder = 'ex2_results';
+
+fig_option = struct( ...
+    'width', 700, ...
+    'height', 400, ...
+    'margin', struct('t', 30, 'l', 5, 'r', 5, 'b', 10) ...
+    );
+
 %% 1. Loading Data
 KOR_data = readmatrix("tsdata_20250704.xlsx",'Sheet','KOR','Range','B2:M102');
 % 2000 Q1 ~ 2025 Q1
@@ -67,7 +75,7 @@ kor_gov3Y = kor_int(:,4);
 %% Autocovariance of Variables
 us_y = [us_growth,us_gdpdef_inf,us_pce_inf,us_cpi_inf,us_ffe,us_T10Y,us_unemp];
 us_var_list = {'growth','gdpdefinf','pceinf','cpiinf','ffe','T10Y','unemp'};
-ind_control = 1;
+ind_control = 2;
 us_var = us_y(:,ind_control);
 
 kor_y = [kor_growth,kor_gdpdef_inf,kor_cpi_inf,kor_forex_growth,kor_call,kor_cd,kor_gov1Y,kor_gov3Y,kor_unemp];
@@ -75,11 +83,19 @@ kor_var_list = {'growth', 'gdpdefinf','cpiinf','dforex','call','cd91','gov1','go
 ind_control = 1; % Use this as the control of choosing which variable to use
 kor_var = kor_y(:,ind_control);
 
-[acor2,bound2] = autocor(us_var,[],1);
-[acor1,bound1] = autocor(kor_var,[],1);
+[acor1,bound1] = autocor(us_var,[],1);
+f1 = gcf;
+save_as_html(f1,save_folder,'figure1',fig_option)
 
-[BoxPierce2, pval_BP2, LjungBox2, pval_LB2, tb2] = WN_test(us_var);
-[BoxPierce1, pval_BP1, LjungBox1, pval_LB1, tb1] = WN_test(kor_var);
+[acor2,bound2] = autocor(us_y(:,1),[],1);
+f2 = gcf;
+save_as_html(f2,save_folder,'figure2',fig_option)
+
+[acor3,bound3] = autocor(kor_var,[],1);
+
+%% BP and LB Test
+[BoxPierce1, pval_BP1, LjungBox1, pval_LB1, tb1] = WN_test(us_var);
+[BoxPierce2, pval_BP2, LjungBox2, pval_LB2, tb2] = WN_test(kor_var);
 
 return
 
