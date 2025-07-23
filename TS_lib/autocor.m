@@ -44,7 +44,7 @@ if is_plot == 1
     xlabel('Lag', 'FontSize', 15, 'interpreter', 'latex')
     ylabel('Sample Autocorrelation', 'FontSize', 15, 'interpreter', 'latex')
     yl = ylim;
-    ylim([yl(1), min(1.05, yl(2)*1.05)])
+    ylim([min(yl(1),bound(:,2))*1.05, min(1.05, yl(2)*1.05)])
     hold on
     yline(bound(:,1), '-b','LineWidth',1.3)
     yline(bound(:,2), '-b','LineWidth',1.3)

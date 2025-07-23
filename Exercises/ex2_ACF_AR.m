@@ -22,7 +22,7 @@ save_folder = 'ex2_results';
 fig_option = struct( ...
     'width', 700, ...
     'height', 400, ...
-    'margin', struct('t', 30, 'l', 5, 'r', 5, 'b', 10) ...
+    'margin', struct('t', 30, 'l', 5, 'r', 5, 'b', 0) ...
     );
 
 %% 1. Loading Data
@@ -75,7 +75,7 @@ kor_gov3Y = kor_int(:,4);
 %% Autocovariance of Variables
 us_y = [us_growth,us_gdpdef_inf,us_pce_inf,us_cpi_inf,us_ffe,us_T10Y,us_unemp];
 us_var_list = {'growth','gdpdefinf','pceinf','cpiinf','ffe','T10Y','unemp'};
-ind_control = 2;
+ind_control = 4;
 us_var = us_y(:,ind_control);
 
 kor_y = [kor_growth,kor_gdpdef_inf,kor_cpi_inf,kor_forex_growth,kor_call,kor_cd,kor_gov1Y,kor_gov3Y,kor_unemp];
