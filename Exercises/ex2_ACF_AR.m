@@ -91,6 +91,8 @@ save_as_html(f1,save_folder,'figure1',fig_option)
 f2 = gcf;
 save_as_html(f2,save_folder,'figure2',fig_option)
 
+return
+
 [acor3,bound3] = autocor(kor_var,[],1);
 
 %% BP and LB Test
