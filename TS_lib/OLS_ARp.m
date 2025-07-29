@@ -1,7 +1,7 @@
 function [phi_hat, sig2_hat, F, Y0, Y_lag, y_hat, u_hat, Y_predm] = OLS_ARp(y,p,h)
 % =========================================================================
 % DESCRIPTION
-% Esimation of the AR(p) Model
+% Esimation of the AR(p) Model using OLS
 
 % -------------------------------------------------------------------------
 % INPUT AND OUTPUTS

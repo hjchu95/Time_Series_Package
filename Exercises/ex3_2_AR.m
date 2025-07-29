@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% This exercise estimates and compares the AR(p) process of the US
-% macroeconomic data using OLS and MLE.
+% This exercise compares the LSE and MLE of the simulated data and the US
+% macroeconomic data.
 
 % Written by Hyun Jae Stephen Chu
 % July 29th, 2025
@@ -12,6 +12,58 @@ rng(123)
 
 addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/Exercises")
 addpath(genpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/TS_lib"))
+
+%% 1. Simulating Data
+tru_T = 250;
+tru_mu = 0.5;
+tru_a = [0.5;-0.2;0.1]; % AR(3) process
+tru_sig2 = 0.5;
+
+tru_p = rows(tru_a);
+
+tru_Y = zeros(tru_T,1);
+for t = 1:tru_T
+    y_star = tru_mu + sqrt(tru_sig2)*randn(1);
+    for i = 1:tru_p
+        y_star = y_star + tru_a(i,1)*tru_Y(t+tru_p-i,1);
+    end
+    tru_Y(t+tru_p,1) = y_star;
+end
+
+tru_Y = tru_Y(tru_p+1:end,1);
+
+tru_theta = [tru_mu;tru_a;tru_sig2];
+
+%% 2. AR OLS
+y = tru_Y;
+p = tru_p;
+
+[phi_hat, sig2_hat, F, Y0, Y_lag, y_hat, u_hat, Y_predm] = OLS_ARp(y,p);
+
+mu_hat = meanc(y)*(1-sumc(phi_hat));
+theta_OLS = [mu_hat;phi_hat;sig2_hat];
+
+%% 3. AR MLE
+option = 1;
+[theta_MLE] = MLE_ARp(y,p);
+
+%% 4. Display Results
+index1 = [];
+for i = 1:p
+    index1 = [index1; ['AR_L',num2str(i)]];
+end
+
+maxlen = size(index1, 2);
+mu_padded = ['mu', repmat(' ', 1, maxlen - length('mu'))];
+sig2_padded = ['sig2', repmat(' ', 1, maxlen - length('sig2'))];
+index1 = [mu_padded; index1; sig2_padded];
+
+result_df = table(index1,tru_theta,theta_OLS,theta_MLE);
+result_df.Properties.VariableNames = ["Index","True","OLS","MLE"];
+disp(" ")
+disp(result_df)
+
+return
 
 %% 1. Loading Data
 KOR_data = readmatrix("tsdata_20250704.xlsx",'Sheet','KOR','Range','B2:M102');
