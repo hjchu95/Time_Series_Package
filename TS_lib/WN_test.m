@@ -50,7 +50,7 @@ result_df(2,:) = {pval_BP, pval_LB};
 disp(" ")
 disp(result_df)
 disp("* H0:r(1)=r(2)=...=r(h)=0 (Process is White Noise)")
-disp("** sig level < p-value = reject H0 under sig level,")
+disp("** p-value < sig. level = reject H0 under sig level,")
 disp("   i.e. process is not White Noise.")
 
 end

@@ -17,7 +17,7 @@ rng(123)
 addpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/Exercises")
 addpath(genpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/TS_lib"))
 
-save_folder = 'ex2_results';
+save_folder = 'ex3_1_results';
 
 fig_option = struct( ...
     'width', 700, ...
@@ -91,21 +91,15 @@ save_as_html(f1,save_folder,'figure1',fig_option)
 f2 = gcf;
 save_as_html(f2,save_folder,'figure2',fig_option)
 
-return
-
 [acor3,bound3] = autocor(kor_var,[],1);
 
 %% BP and LB Test
 [BoxPierce1, pval_BP1, LjungBox1, pval_LB1, tb1] = WN_test(us_var);
-[BoxPierce2, pval_BP2, LjungBox2, pval_LB2, tb2] = WN_test(kor_var);
-
-return
+[BoxPierce2, pval_BP2, LjungBox2, pval_LB2, tb2] = WN_test(us_y(:,1));
+[BoxPierce3, pval_BP3, LjungBox3, pval_LB3, tb3] = WN_test(kor_var);
 
 %% AR OLS
 p = 4;
 H = 8;
-[phi_hat, sig2_hat, F, Y0, Y_lag, y_hat, u_hat, Y_predm] = OLS_ARp(kor_var,p,H);
+% [phi_hat, sig2_hat, F, Y0, Y_lag, y_hat, u_hat, Y_predm] = OLS_ARp(kor_var,p,H);
 [phi_hat2, sig2_hat2, F2, Y02, Y_lag2, y_hat2, u_hat2, Y_predm2] = OLS_ARp(us_var,p,H);
-
-%% AR MLE
-

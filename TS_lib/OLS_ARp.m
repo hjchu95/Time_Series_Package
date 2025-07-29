@@ -76,13 +76,13 @@ if H == 0
     Y_predm = [];
 else
     Y_predm = zeros(H,1);
-    Y_lag = flip(Y0(end-p+1:end,:));
+    Y_lag_h = flip(Y0(end-p+1:end,:));
     FF = F;
     for h = 1:H
-        Y_h = FF*Y_lag;
+        Y_h = FF*Y_lag_h;
         y_h = Y_h(1,1);
         Y_predm(h,:) = y_h;
-        Y_lag = [y_h; Y_lag(1:p-1,:)];
+        Y_lag_h = [y_h; Y_lag_h(1:p-1,:)];
         FF = FF*F;
     end
 
@@ -178,7 +178,7 @@ if H ~= 0
         axis([0 rows(Y_H) yhmin+weight1 yhmax*1.1])
     end
     hold on
-    plot((rows(Y0)+1:rows(Y_H)), Y_predm, '--r', 'LineWidth', 1.5)
+    plot((rows(Y0):rows(Y_H)), [Y0(end);Y_predm], '-r', 'LineWidth', 1.5)
     legend({'Data','Predict'})
     grid on
 

@@ -18,7 +18,7 @@ addpath(genpath("/Users/hjchu/Documents/GitHub/Time_Series_Package/TS_lib"))
 us_xtick_labels1 = {'1960','1965','1970','1975','1980','1985','1990','1995','2000','2005','2010','2015','2020','2025'};
 us_xtick_labels2 = {'1961','1966','1971','1976','1981','1986','1991','1996','2001','2006','2011','2016','2021'};
 
-save_folder = 'ex1_1_results';
+save_folder = 'ex2_1_results';
 
 fig_option = struct( ...
     'legori','h', ...
